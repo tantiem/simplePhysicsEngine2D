@@ -32,8 +32,8 @@ import EntityJS;
 class CollisionDetector:
     def __init__(self) -> None:
         pass
-
-    def collideRect(self,collider:EntityJS.PhysicsEntity,collidee:EntityJS.PhysicsEntity):
+    @staticmethod
+    def collideRect(collider:EntityJS.PhysicsEntity,collidee:EntityJS.PhysicsEntity):
         #Store collider and collidee edges
         l1 = collider.getLeft()
         t1 = collider.getTop()
@@ -54,7 +54,7 @@ class CollisionDetector:
         #if the algorithm made it here, it had to have collided
         return True
     @staticmethod
-    def getCollisions(self,entities:list[EntityJS.PhysicsEntity]):
+    def getCollisions(entities:list[EntityJS.PhysicsEntity]):
         #Here we will need to find all unique collisions between all entities.
         collisionDict = {}
         for entity in entities:
@@ -63,8 +63,10 @@ class CollisionDetector:
             # of another dynamic on the right.)
             if entity.bodyType == EntityJS.EnitityBodyType["DYNAMIC"]:
                 for other in entities:
+                    if entity == other:
+                        continue
                     #Check if a collision occured
-                    if self.collideRect(entity,other):
+                    if CollisionDetector.collideRect(entity,other):
                         #skip if this collision is already recorded
                         if collisionDict[(entity,other)] or collisionDict[(other,entity)]:
                             continue

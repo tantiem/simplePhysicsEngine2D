@@ -225,26 +225,36 @@ class PhysicsEntity:
         # the half sizes and any other pieces
         self.updateBounds()
 
-        # Update bounds includes the rect's
-        # boundary updates
-        def updateBounds(self):
-            self.halfWidth = self.width * .5
-            self.halfHeight = self.height * .5
-        # Getters for the mid point of the rect
-        def getMidX(self):
-            return self.halfWidth + self.x
-        def getMidY(self):
-            return self.halfHeight + self.y
-        # Getters for the top, left, right, and bottom
-        # of the rectangle
-        def getTop(self):
-            return self.y
-        def getLeft(self):
-            return self.x
-        def getRight(self):
-            return self.x + self.width
-        def getBottom(self):
-            return self.y + self.height
+    # Update bounds includes the rect's
+    # boundary updates
+    def updateBounds(self):
+        self.halfWidth = self.width * .5
+        self.halfHeight = self.height * .5
+    # Getters for the mid point of the rect
+    def getMidX(self):
+        return self.halfWidth + self.x
+    def getMidY(self):
+        return self.halfHeight + self.y
+    # Getters for the top, left, right, and bottom
+    # of the rectangle
+    def getTop(self):
+        return self.y
+    def getLeft(self):
+        return self.x
+    def getRight(self):
+        return self.x + self.width
+    def getBottom(self):
+        return self.y + self.height
+    def __eq__(self, __o: object) -> bool:
+        if self.id == __o.id:
+            return True
+        return False
+
+    def __ne__(self, __o: object) -> bool:
+        return not self.__eq__(__o)
+
+    def __hash__(self) -> int:
+        return hash(self.id)
 
 
 class Collision:

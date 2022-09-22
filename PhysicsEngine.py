@@ -20,13 +20,13 @@ class PhysicsEngine:
         gy = GRAVITY_Y * elapsed
         #Time passes, objects move. (or dont)
         for entity in self.entities:
-            if entity.bodyType == EntityJS.DYNAMIC:
+            if entity.bodyType == EntityJS.EnitityBodyType["DYNAMIC"]:
                 entity.vx += entity.ax * elapsed + gx
                 entity.vy += entity.ay * elapsed + gy
                 entity.x  += entity.vx * elapsed
                 entity.y  += entity.vy * elapsed
                 break
-            elif entity.bodyType == EntityJS.KINEMATIC:
+            elif entity.bodyType == EntityJS.EntityBodyType["KINEMATIC"]:
                 entity.vx += entity.ax * elapsed
                 entity.vy += entity.ay * elapsed
                 entity.x  += entity.vx * elapsed
