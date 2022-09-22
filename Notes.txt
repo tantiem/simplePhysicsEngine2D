@@ -1,0 +1,143 @@
+Engine is as complicated as needs be- No need for super complicated if not
+going to use super complicated functionality.
+
+CPU util:
+Games have a lot of cpu power to take hold of, and typically a game is alotted about 16~33 ms
+to still be considered runnable. Making a simple physics engine saves room for other stuff.
+
+First step:
+Choose the features, and decide order of operations.
+For the basic platformer game, we will need:
+
+-Velocity, acceleration, gravity
+-Collision detection
+-Bouncy collisions
+-Normal collisions
+
+Engine runtime:
+Either high-precision or real-time.
+
+	High-precision: 
+	Simulate difficult or critical physics calculations
+
+	Real-time:
+	Type for games, infiniteley run calculations until game end.
+
+		Static - constant time pass every frame
+		Dynamic - actual delta time passed in every frame
+
+Order of operations matters a lot. Update movement before checking collisions can result in 
+unwanted jittery behaviour.
+
+Our order of operations:
+	1. User input
+	2. Position resolution
+	3. Detect collisions
+		3b. Resolve collisions
+
+Newtonian physics or electromagnetism both are important fields of physics,
+but for this game, we only need a Rigidbody system.
+
+The main API components we will need to program are:
+	-Physics entities
+	-Collision detector
+	-Collision solver
+	-Physics engine
+
+Entities are the least active (the bodies in the simulation)
+The detector and solver work together by finding collisions between two entities,
+and then passing that info over to the solver. 
+Solved collisions then result in modifications to the entities involved
+
+Physics engine
+________________________________
+Entity  -----------+           |
+   |   |           |           |
+Entity |  _________V ________  |
+   |   |  |  Position Res   |  |
+Entity |  ---------|---------  |
+   |   |  |    Col Detect   |  |
+Entity |  ---------|---------  |
+   |   |  |   Col Resolve   |  |
+  ...  |  ---------|---------  |
+       |           |           |
+       :  <--------+           |
+--------------------------------
+
+Entity:
+
+JS translation 1 > entity py file.
+
+Entity is made as the model in an MVC/MVP design pattern, such that any graphics
+can be applied to its' calculations.
+
+When it comes to resolving positions, we can use the formula:
+
+p(n+1) = v * t + p(n)
+
+simplified, the next position is equal to the current velocity, multiplied by the change
+in time, added to the current position.
+
+the velocity can be modeled by:
+
+v(n+1) = a * t * v(n)
+
+To determine the collided section, we can use four collision quadrants, as determined by
+a combination of half heights and widths away from the midpoint.
+
+JS translation 2 > collide py file
+
+           -------
+           |t1>b2|
+           -------
+            v collision
+  -------  |2|___      -------
+  |l1>r2|   |_1__|     |r1<l2|
+  -------              -------
+
+           -------
+           |b1<t2|
+           -------
+
+The last part of the pipeline is the solver.
+
+When a collision is encountered, all entities must calculate their resolved location
+
+JS translation 3 > collide resolve py file
+
+sticky threshold is a constant that "rests" (verb) objects in motion, whose motion
+is not that much, to prevent forever bouncing.
+
+The engine is the most important part of a physics engine. All the other components
+are brought together here in harmony, working as separate components to accomplish
+a single goal: physics
+
+JS translation 4 > the engine
+
+
+
+
+After copying all of the pseudo code, there were a lot of changes that needed to be made 
+in order for it to be functional.
+
+We will work our way backwards:
+First- the engine.
+
+the engine is described in such a way that it supports a player and everything else, as
+if the player is the only collisive object that matters. This limits the scope of the engine
+significantly, so we are going to fix it so that it records all collisions.
+
+To do this, we will need to change the calls to the collisions finder and collision solver.
+
+the collision getter used to take in a player and a list of everything else- it has been
+modified to just take in the entity list that the engine keeps track of. Now,
+we will step into this method.
+
+getCollisions will take in a list of entities, and return a dict of 
+(entity,entity):Collision so we can iterate through the values like a list later
+and not have to deal with the slowness of checking if an item is already in a list
+
+This means we will have to override the previous ambiguous definition of Collision to be
+something more useful.
+
+
