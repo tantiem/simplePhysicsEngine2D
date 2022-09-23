@@ -13,6 +13,7 @@ class PhysicsEngine:
     def addEntity(self,entity):
         self.entityCount = self.entityCount + 1
         entity.id = self.entityCount
+        print(f"entity id added: {entity.id}")
         self.entities.append(entity)
 
     def step(self,elapsed):
@@ -20,18 +21,18 @@ class PhysicsEngine:
         gy = GRAVITY_Y * elapsed
         #Time passes, objects move. (or dont)
         for entity in self.entities:
-            if entity.bodyType == EntityJS.EnitityBodyType["DYNAMIC"]:
+            if entity.bodyType == EntityJS.EntityBodyType["DYNAMIC"]:
                 entity.vx += entity.ax * elapsed + gx
                 entity.vy += entity.ay * elapsed + gy
                 entity.x  += entity.vx * elapsed
                 entity.y  += entity.vy * elapsed
-                break
+                continue
             elif entity.bodyType == EntityJS.EntityBodyType["KINEMATIC"]:
                 entity.vx += entity.ax * elapsed
                 entity.vy += entity.ay * elapsed
                 entity.x  += entity.vx * elapsed
                 entity.y  += entity.vy * elapsed
-                break
+                continue
 
         collisions = CollisionDetector.getCollisions(self.entities)
         #At this point, we now have gone through collision detection for all entities

@@ -156,7 +156,7 @@ PhysicsEntity.ELASTIC = 'elastic';
 
 # Dynamic entities will be completely changing and are
 # affected by all aspects of the physics system
-EnitityBodyType = {"KINEMATIC":0,"DYNAMIC":1}
+EntityBodyType = {"KINEMATIC":0,"DYNAMIC":1}
 
 # Solver Constants
 
@@ -190,11 +190,11 @@ class PhysicsEntity:
         self.id = id
         # Setup the defaults if no parameters are given
         # Type represents the collision detector's handling
-        self.bodyType = bodyType or EnitityBodyType["DYNAMIC"]
+        self.bodyType = bodyType
         # Collision represents the type of collision
         # another object will receive upon colliding
         
-        self.resolutionType = resolutionType or EntityResolutionType["ELASTIC"]
+        self.resolutionType = resolutionType
         
         # Take in a width and height
         self.width  = width or 20

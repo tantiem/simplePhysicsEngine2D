@@ -107,24 +107,28 @@ resolveElastic: function(player, entity) {
 import copy
 import random
 import EntityJS
+from EntityJS import EntityBodyType
 STICKY_THRESHOLD = 0.004
 class CollisionResolver:
     def __init__(self) -> None:
         pass
 
     @staticmethod
-    def resolve(self,entity:EntityJS.PhysicsEntity,other:EntityJS.PhysicsEntity):
+    def resolve(entity:EntityJS.PhysicsEntity,other:EntityJS.PhysicsEntity):
         #do stuff based on if entity or other is kinematic, dynamic, whatever kind of resolution specified
         
         #oldEntitySpot = copy.deepcopy(entity)
-        self.resolveElastic(entity,other)
-        #if other.bodyType == EntityJS.EnitityBodyType["DYNAMIC"]:
+        #print(f"entity: {entity.id}; other: {other.id}")
+        CollisionResolver.resolveElastic(entity,other)
+        #if other.bodyType == EntityJS.EntityBodyType["DYNAMIC"]:
         #    self.resolveElastic(other,oldEntitySpot)
 
 
-    
-    def resolveElastic(self,player:EntityJS.PhysicsEntity, entity:EntityJS.PhysicsEntity):
+    @staticmethod
+    def resolveElastic(player:EntityJS.PhysicsEntity, entity:EntityJS.PhysicsEntity):
         #// Find the mid points of the entity and player
+
+        
         pMidX = player.getMidX()
         pMidY = player.getMidY()
         aMidX = entity.getMidX()

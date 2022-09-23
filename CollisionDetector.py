@@ -61,18 +61,20 @@ class CollisionDetector:
             #Check if the body type is dynamic or kinematic; based on the resolution code,
             #we only want dynamic bodies on the left and kinematic on the right (or slight chance
             # of another dynamic on the right.)
-            if entity.bodyType == EntityJS.EnitityBodyType["DYNAMIC"]:
-                for other in entities:
-                    if entity == other:
-                        continue
-                    #Check if a collision occured
-                    if CollisionDetector.collideRect(entity,other):
-                        #skip if this collision is already recorded
+            if entity.bodyType == EntityJS.EntityBodyType["KINEMATIC"]:
+                continue
+            for other in entities:
+                if entity == other:
+                    continue
+                #Check if a collision occured
+                if CollisionDetector.collideRect(entity,other):
+                    #skip if this collision is already recorded
+                    try:
                         if collisionDict[(entity,other)] or collisionDict[(other,entity)]:
                             continue
+                    except KeyError:
                         #Record this collision, store a collision object
-                        else:
-                            collisionDict[(entity,other)] = EntityJS.Collision(entity,other)
+                        collisionDict[(entity,other)] = EntityJS.Collision(entity,other)
         return collisionDict
 
 
